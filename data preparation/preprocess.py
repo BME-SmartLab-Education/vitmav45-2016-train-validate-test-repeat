@@ -14,7 +14,7 @@ from keras.preprocessing import image
 
 def csv_load():
     csv_data = []
-    file_name = 'train_info_modified_fixed.csv'
+    file_name = '/home/bence/Documents/vitmav45-2016-train-validate-test-repeat/data_preparation/train_info_modified_fixed.csv'
 
     try:
         with open(file_name) as csvfile:
@@ -37,7 +37,7 @@ def csv_load():
 
 
 def load_images(img_file_names):
-    location = './train_sample'
+    location = '/home/bence/Documents/vitmav45-2016-train-validate-test-repeat/data_preparation/train_sample'
     imgs = []
     img_name_dict = {}
     ind = 0
@@ -83,12 +83,14 @@ def data_preprocess(imgs, data, img_name_dict):
         print(x)
     print()
 
+    result = []
     for x in trn_data:
         if x[0] in img_name_dict:
+            result.append(x)
             print(x)
     print()
 
-    return imgs, data
+    return trn_images, result
 
 
 if __name__ == "__main__":
