@@ -79,16 +79,16 @@ def data_preprocess(imgs, data, img_name_dict):
     trn_images = [np.array(x[1]) for x in trn_images]
     trn_data = [x[1:] for x in trn_data]
 
-    for x in trn_images:
-        print(x)
-    print()
+    # for x in trn_images:
+    #     print(x)
+    # print()
 
     result = []
     for x in trn_data:
         if x[0] in img_name_dict:
             result.append(x)
-            print(x)
-    print()
+    #        print(x)
+    #print()
 
     return trn_images, result
 
