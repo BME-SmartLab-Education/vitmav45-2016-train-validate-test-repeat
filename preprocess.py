@@ -36,8 +36,7 @@ def csv_load():
     return [x[0] for x in csv_data], csv_data
 
 
-def load_images(img_file_names):
-    location = 'train_sample'
+def load_images(img_file_names, location = "train_sample"):
     imgs = []
     img_name_dict = {}
     ind = 0
@@ -90,7 +89,7 @@ def data_preprocess(imgs, data, img_name_dict):
     #        print(x)
     #print()
 
-    return trn_images, result
+    return np.array(trn_images), result
 
 
 if __name__ == "__main__":
