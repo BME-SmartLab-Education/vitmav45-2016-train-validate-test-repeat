@@ -42,6 +42,7 @@ def load_images(csv_data, location = "train_sample"):
                 if len(labels) % 2000 == 0:
                     print(len(labels), "images loaded")
 
+    print(len(labels), "images in the result")
     return np.array(data), np.array(labels)
 
 
