@@ -24,11 +24,7 @@ def csv_load(csv_file_name = "train_info_modified_fixed.csv"):
 
 
 def csv_select(sorce_csv_data, target_authors):
-    csv_data = {}
-    for name, data in sorce_csv_data.items():
-        if data[0] in target_authors:
-            csv_data[name] = data
-    return csv_data
+    return { name: data for name, data in sorce_csv_data.items() if data[0] in target_authors }
 
 
 def load_images(csv_data, location = "train_sample"):
@@ -46,7 +42,7 @@ def load_images(csv_data, location = "train_sample"):
                 if len(labels) % 2000 == 0:
                     print(len(labels), "images loaded")
 
-    # gc.collect(); - nem volt sok értelme
+    # gc.collect() - nem volt sok értelme
     # byte-ként is lehetne tárolni: np.array(data, dtype="uint8") - ennek sem volt sok értelme
     return np.array(data), np.array(labels)
 
