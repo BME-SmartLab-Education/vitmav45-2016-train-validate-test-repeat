@@ -30,18 +30,28 @@ def csv_select(sorce_csv_data, target_authors):
 def load_images(csv_data, location = "train_sample"):
     data = []
     labels = []
-
+    counter=0
     for subdir, dirs, files in os.walk(location):
         for file in files:
             if file in csv_data:
                 img_loc = os.path.join(subdir, file)
                 img = image.load_img(img_loc, target_size=(256, 256))
                 labels.append(csv_data[file][0])
-                data.append(np.array(img))
+                img_arr=np.array(img)
+                data.append(img_arr)
+                
+                img = None
+                img_arr = None
 
                 if len(labels) % 2000 == 0:
                     print(len(labels), "images loaded")
 
+                if (counter%10):
+                    gc_res=gc.collect()
+                    print("GC collect: ",gc_res)
+                    
+                counter=counter+1
+                
     # gc.collect() - nem volt sok értelme
     # byte-ként is lehetne tárolni: np.array(data, dtype="uint8") - ennek sem volt sok értelme
     return np.array(data), np.array(labels)
