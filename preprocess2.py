@@ -1,12 +1,14 @@
 import csv
 import os
 import gc
+from collections import defaultdict
 
 import numpy as np
 from keras.preprocessing import image
 
 def csv_load(csv_file_name = "train_info_modified_fixed.csv"):
     csv_data = {}
+    author_stat = defaultdict(int)
 
     try:
         with open(csv_file_name) as csvfile:
@@ -14,9 +16,18 @@ def csv_load(csv_file_name = "train_info_modified_fixed.csv"):
             next(reader, None)
             for line in reader:
                 csv_data[line[0]] = line[1:]
+                author_stat[line[1]] += 1
     except Exception as e:
         print(e)
 
+    return csv_data, author_stat
+
+
+def csv_select(sorce_csv_data, target_authors):
+    csv_data = {}
+    for name, data in sorce_csv_data.items():
+        if data[0] in target_authors:
+            csv_data[name] = data
     return csv_data
 
 
