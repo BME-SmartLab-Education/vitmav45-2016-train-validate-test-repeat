@@ -20,7 +20,8 @@ def csv_load(csv_file_name = "train_info_modified_fixed.csv"):
     return csv_data, sorted(author_stat.items(), key=operator.itemgetter(1))
 
 
-def csv_select(sorce_csv_data, target_authors):
+def csv_select(sorce_csv_data, author_stat):
+    target_authors = [label for label, n in author_stat]
     return { name: data for name, data in sorce_csv_data.items() if data[0] in target_authors }
 
 
@@ -37,30 +38,14 @@ def load_images(csv_data, location = "train_sample"):
                 labels.append(csv_data[file][0])
                 img_arr = np.array(img) # TODO: dtype="uint8" - de lehet hogy gond lesz a kerassal, pl standardizálás
                 data.append(img_arr)
-                
-                img_loc = None
-                img = None
-                img_arr = None
 
                 if len(labels) % 2000 == 0:
                     print(len(labels), "images loaded")
 
-                if len(labels) % 10 == 0: # ezt meg kellene próbálni növelni akár 2000-ig
-                    print("GC collect: ", gc.collect())
-
-    np_data = np.array(data)
-    np_labels = np.array(labels)
-
-    # takarítás...
-    data = None
-    labels = None
-    gc.collect()
-
-    return np_data, np_labels
+    return np.array(data), np.array(labels)
 
 
 if __name__ == "__main__":
     print()
-
-    csv_data = csv_load()
+    csv_data, author_stat = csv_load()
     images, labels = load_images(csv_data)
