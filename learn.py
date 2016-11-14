@@ -1,6 +1,6 @@
 from keras.models import Model
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications.inception_v3 import InceptionV3,preprocess_input,decode_predictions
+from keras.applications.inception_v3 import InceptionV3, preprocess_input, decode_predictions
 from keras.preprocessing import image
 from keras.optimizers import SGD
 from keras.layers import Dense, GlobalAveragePooling2D, merge, Dropout
@@ -33,32 +33,32 @@ class TrainingHistory(Callback):
             self.accs.append(logs.get('acc'))
             self.valid_accs.append(logs.get('val_acc'))
             self.epoch += 1
-          
-def learn():
-    history = TrainingHistory()
+    
 
-    # a képek betöltése és előfeldolgozása
-    csv_data, author_stat = pp.csv_load()
+def prepare_data():
+    csv_data, _ = pp.csv_load()
+    # itt kell kiválogatni a adatokat ha akarjuk
     train_images, labels = pp.load_images(csv_data)
-    # adatok megfelelő formátumra hozása a keras számára
+
     encoder = preprocessing.LabelEncoder()
     encoder.fit(labels)
+    labels_onehot = to_categorical(encoder.transform(labels))
 
-    encoded_l = encoder.transform(labels)
-    print(encoded_l)
+    return train_images, labels_onehot, encoder
 
-    labels_onehot = to_categorical(encoded_l)
-    print(labels_onehot)
 
+def make_model():
     base_model = InceptionV3(weights='imagenet', include_top=False)
 
     # kinyerjük a stílusjegyeket a cnn köztes rétegegeiből (és max pool cnn kimeneti rétegére)
     style1 = base_model.layers[54].output
     style1 = GlobalAveragePooling2D()(style1)
     style1 = Dense(96, activation='relu')(style1)
+
     style2 = base_model.layers[117].output
     style2 = GlobalAveragePooling2D()(style2)
     style2 = Dense(160, activation='relu')(style2)
+
     style3 = base_model.layers[184].output
     style3 = GlobalAveragePooling2D()(style3)
     style3 = Dense(320, activation='relu')(style3)
@@ -73,10 +73,16 @@ def learn():
 
     # és végül egy kimenete lesz a hálónak - a "binary_crossentropy" költségfüggvénynek erre van szüksége
     predictions = Dense(labels_onehot.shape[1], activation='softmax')(ff)
+
     # a model létrehozása
-    model = Model(input=base_model.input, output=predictions)
+    return base_model, Model(input=base_model.input, output=predictions)
 
 
+def learn():
+    train_images, labels_onehot, encoder = prepare_data()
+    base_model, model = make_model()
+    history = TrainingHistory()
+    
     # két lépésben fogjuk tanítani a hálót
     # az első lépésben csak az előrecsatolt rétegeket tanítjuk, a konvolúciós rétegeket befagyasztjuk
     for layer in base_model.layers:
@@ -84,8 +90,17 @@ def learn():
     # lefordítjuk a modelt (fontos, hogy ezt a rétegek befagyasztása után csináljuk"
     # mivel két osztályunk van, ezért bináris keresztentrópia költségfüggvényt használunk
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
     model.fit(train_images, labels_onehot, batch_size=8, nb_epoch=50, validation_split=0.2, callbacks=[history])
+
+    # és ismét indítunk egy tanítást, ezúttal nem csak az előrecsatolt rétegek,
+    # hanem az Inception V3 felső rétegei is tovább tanulnak
+    for layer in model.layers[172:]:
+        layer.trainable = True
+
+    # ez után újra le kell fordítanunk a hálót, hogy most már az Inception V3 felsőbb rétegei tanuljanak
+    model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
+    model.fit(train_images, labels_onehot,  batch_size=16, nb_epoch=100, validation_split=0.2, callbacks=[history])
+    print("Tanítás vége.")
 
 if __name__ == "__main__":
     learn()
