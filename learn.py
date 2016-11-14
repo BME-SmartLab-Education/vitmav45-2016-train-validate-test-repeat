@@ -56,20 +56,16 @@ def make_model(output_layer_size):
     base_model = InceptionV3(weights='imagenet', include_top=False)
 
     # kinyerjük a stílusjegyeket a cnn köztes rétegegeiből (és max pool cnn kimeneti rétegére)
-    style1 = base_model.layers[54].output
-    style1 = GlobalAveragePooling2D()(style1)
-    style1 = Dense(96, activation='relu')(style1)
+    desired_layers = [28, 44, 60, 70, 92, 114, 136, 158, 172, 194]
+    style_layers = [None]*len(desired_layers)
 
-    style2 = base_model.layers[117].output
-    style2 = GlobalAveragePooling2D()(style2)
-    style2 = Dense(160, activation='relu')(style2)
-
-    style3 = base_model.layers[184].output
-    style3 = GlobalAveragePooling2D()(style3)
-    style3 = Dense(320, activation='relu')(style3)
+    for i in range(len(desired_layers)):
+        style_layers[i] = base_model.layers[desired_layers[i]].output
+        style_layers[i] = GlobalAveragePooling2D()(style_layers[i])
+        style_layers[i] = Dense(base_model.layers[desired_layers[i]].output_shape[3], activation='relu')(style_layers[i])
 
     # egymás mellé tesszük a különböző szintű feature-öket
-    ff = merge([style1, style2, style3], mode='concat')
+    ff = merge(style_layers, mode='concat')
 
     # ezután hozzáadunk két előrecsatolt réteget ReLU aktivációs függvénnyel
     ff = Dense(2048, activation='relu')(ff)
