@@ -5,8 +5,7 @@
 1. Unzip the Weights.buf.zip inside demo_website/keras folder
 
 2. Navigate to demo_website directory and run:
-
-``` $ npm install ```
-``` $ npm start ```
+</br>``` $ npm install ```
+</br>``` $ npm start ```
 
 3. Launch index.html
