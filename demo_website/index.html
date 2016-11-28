@@ -1,0 +1,78 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>train_validate_test_repeat</title>
+  <meta name="description" content="Boify">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/animate.css">
+
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="node_modules/dropzone/dist/min/dropzone.min.css"/>
+    <link rel="stylesheet" href="node_modules/dropzone/dist/min/basic.min.css"/>
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Name your sexy image:</h4>
+      </div>
+      <div class="modal-body">
+           <input class="form-control" type="text" id="filename" />
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+          <h1 id="title">train_validate_test_repeat</h1>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <button type="button" class="btn btn-small btn-danger" onclick="window.location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+            <form class="dropzone" id="dropzone" action="a.php"></form>
+        </main>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12" id="content">
+          <canvas id="input-canvas" name="input-canvas" width =256 height=256 style="display:none" ></canvas>
+          <canvas id="input-canvas2" name="input-canvas2"></canvas>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-4" id="results">
+      </div>
+    </div>
+  </div>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/dropzone/dist/min/dropzone.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/jimp/browser/lib/jimp.min.js"></script>
+  <script src="weblas.js"></script>
+  <script src="keras.js"></script>
+  <script src="numjs.js"></script>
+  <script src="index2.js"></script>
+  <div id="impressum">made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by train_validate_test_repeat </div>
+</body>
+</html>
