@@ -8,4 +8,5 @@
 
 ``` $ npm install ```
 ``` $ npm start ```
+
 3. Launch index.html
