@@ -32,6 +32,7 @@ $(document).ready(() => {
                     img.src = event.target.result;
                     copy.src = event.target.result;
 
+
                     var ctx2 = document.getElementById('input-canvas2');
 
                     var max_height = Math.min(copy.height * 1.25, window.innerHeight - 250)
@@ -39,7 +40,7 @@ $(document).ready(() => {
                     ctx2.width = max_width;
                     ctx2.height = max_height;
                     ctx = ctx2.getContext('2d');
-                    ctx.drawImage(copy, 0, 0, max_width, max_height);
+                    ctx.drawImage(copy,0, 0, max_width, max_height);
 
                     var W = 256;
                     var H = 256;
@@ -85,7 +86,6 @@ $(document).ready(() => {
                 'input_1': data3.data
             }
             data3 = null;
-            //console.log('ready');
             console.log(inputData);;
             console.log(model.inputTensors);
 
@@ -105,9 +105,10 @@ $(document).ready(() => {
                     return top10[x] < top10[y];
                 });
                 var results = document.getElementById('results');
+                results.innerHTML += '<h2 id="pred">Prediciton:</h2>'
                 for (var i = 0; i < top3_index.length; ++i) {
                     console.log(top10[top3_index[i]] + ' -> ' + top3_index[i]);
-                    results.innerHTML += top10[top3_index[i]].toPrecision(10) + ' -> ' + top3_index[i] + '<br>'
+                    results.innerHTML += '<p>' + top10[top3_index[i]].toPrecision(6) + ' -> ' + top3_index[i] + '</p>'
                 }
             }).catch(err => {
                 console.log(err, "Problem with predict");
