@@ -1,0 +1,139 @@
+
+@font-face{
+    font-family: HThin;
+    src: url('../assets/HelveticaNeue-Thin.ttf');
+}
+
+
+body{
+    background: #ECECEC;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+hmtl{
+    height: 100%;
+}
+
+#title{
+    font-family: 'HThin', sans-serif;
+    font-weight: 300;
+    font-size: 48px;
+    margin: 4px 0 8px 0;
+    letter-spacing: 2px;
+}
+
+canvas{
+    visibility: visible;
+    margin: 0 auto;
+}
+
+.btn{
+    float:right;
+    margin: 15px 4px 0 0;
+}
+
+#dropzone{
+    border-radius: 5px;
+    border:2px dashed #f0ad4e;
+}
+
+#dropzone span{
+    font-weight: bold;
+}
+
+.dropzone{
+    font-family: 'HThin', sans-serif;
+    font-size: 24px;
+}
+
+.imagepicker ul,
+.stickers ul{
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    width: 1200px;
+    display: none;
+}
+
+.imagepicker ul{
+    padding-left: 118px;
+}
+
+.stickers ul {
+    padding-left: 33px;
+}
+
+.imagepicker{
+    margin-top:10px;
+}
+
+ul li{
+    display: inline-block;
+    border:1px solid #eee;
+}
+
+ul li:hover{
+    border:1px solid #85abf8;
+    cursor:pointer;
+    -webkit-transition: 0.2s ease-in-out 0.1s;
+    -moz-transition: 0.2s ease-in-out 0.1s;
+    transition: 0.2s ease-in-out 0.1s;
+}
+
+ul li:active{
+    border:1px solid #e74c3c;
+}
+
+ul li img{
+    max-width: 100px;
+}
+
+#removeObj{
+    display:none;
+}
+
+#right,#left{
+    font-size: 32px;
+    top:10px;
+}
+
+#right:hover,#left:hover{
+    color:#85abf8;
+    -webkit-transition: 0.2s ease-in-out 0.0s;
+    -moz-transition: 0.2s ease-in-out 0.0s;
+    transition: 0.2s ease-in-out 0.0s;
+    cursor: pointer;
+}
+
+#impressum{
+    font-family: 'HThin', sans-serif;
+    position: fixed;
+    bottom: 0;
+    margin:0 auto;
+    color:black;
+    font-weight: bold;
+    left: 50%;
+    bottom:0;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+
+#input-canvas2{
+    display: block;
+    margin: 0 auto;
+}
+
+#results p {
+    text-align: center;
+    font-family: 'HThin', sans-serif;
+    font-size: 18px;
+}
+
+#pred{
+    font-family: 'HThin', sans-serif;
+    border-top:1px solid #d2d2d2;
+    text-align: center;
+    margin-top: 2px;
+    font-weight: 200;
+}
