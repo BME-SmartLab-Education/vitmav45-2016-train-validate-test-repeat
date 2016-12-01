@@ -32,7 +32,6 @@ $(document).ready(() => {
                     img.src = event.target.result;
                     copy.src = event.target.result;
 
-
                     var ctx2 = document.getElementById('input-canvas2');
 
                     var max_height = Math.min(copy.height * 1.25, window.innerHeight - 250)
@@ -40,7 +39,7 @@ $(document).ready(() => {
                     ctx2.width = max_width;
                     ctx2.height = max_height;
                     ctx = ctx2.getContext('2d');
-                    ctx.drawImage(copy,0, 0, max_width, max_height);
+                    ctx.drawImage(copy, 0, 0, max_width, max_height);
 
                     var W = 256;
                     var H = 256;
@@ -91,19 +90,18 @@ $(document).ready(() => {
 
             model.predict(inputData).then(outputData => {
                 console.log(outputData);
+
                 var top10 = outputData['dense_8'];
-                var top3_index = [0, 1, 2];
-                for (var i = 0; i < top10.length; ++i) {
-                    for (var j = 0; j < top3_index.length; ++j) {
-                        if (top10[i] > top10[top3_index[j]] && top3_index.indexOf(i) == -1) {
-                            top3_index[j] = i;
-                            break;
-                        }
-                    }
-                }
-                top3_index.sort(function(x, y) {
-                    return top10[x] < top10[y];
+                var top10_sorted = top10.slice();
+                top10_sorted.sort(function(x, y) {
+                    return x < y;
                 });
+                console.log(top10);
+                console.log(top10_sorted);
+                var top3_index = [];
+                for (var i = 0; i < 3; ++i) {
+                    top3_index.push(top10.indexOf(top10_sorted[i]))
+                }
                 var results = document.getElementById('results');
                 results.innerHTML += '<h2 id="pred">Prediciton:</h2>'
                 for (var i = 0; i < top3_index.length; ++i) {
