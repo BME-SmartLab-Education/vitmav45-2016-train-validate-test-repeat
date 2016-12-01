@@ -103,7 +103,7 @@ $(document).ready(() => {
                     top3_index.push(top10.indexOf(top10_sorted[i]))
                 }
                 var results = document.getElementById('results');
-                results.innerHTML += '<h2 id="pred">Prediciton:</h2>'
+                results.innerHTML += '<h2 id="pred">Results:</h2>'
                 for (var i = 0; i < top3_index.length; ++i) {
                     console.log(top10[top3_index[i]] + ' -> ' + top3_index[i]);
                     results.innerHTML += '<p>' + top10[top3_index[i]].toPrecision(6) + ' -> ' + top3_index[i] + '</p>'
