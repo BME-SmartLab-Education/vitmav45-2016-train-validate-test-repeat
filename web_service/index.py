@@ -64,7 +64,10 @@ def upload_file():
 
 
 def load_model():
-    model = model_from_json(json.loads('model.json'))
+    json_file = open('model.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    model = model_from_json(json.loads(loaded_model_json))
     model.load_weights('sulyok.hdf5')
     return model
 
