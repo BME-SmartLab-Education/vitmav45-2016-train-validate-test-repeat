@@ -2,11 +2,12 @@ import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
-from keras.models import Model
+from keras.models import Model, model_from_json
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, GlobalAveragePooling2D, merge, Dropout
 import numpy as np
 from keras.utils.np_utils import to_categorical
+import json
 
 
 from keras.preprocessing import image
@@ -47,8 +48,8 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             model = load_model()
-            small_image = preprocess_image(uploaded_file(filename))
-            output = predict(model, small_image)
+            # small_image = preprocess_image(uploaded_file(filename))
+            # output = predict(model, small_image)
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return '''
@@ -63,39 +64,8 @@ def upload_file():
 
 
 def load_model():
-    base_model = InceptionV3(weights='imagenet', include_top=False)
-
-    # kinyerjük a stílusjegyeket a cnn köztes rétegegeiből (és max pool cnn
-    # kimeneti rétegére)
-    desired_layers = [28, 44, 60, 70, 92, 114, 136, 158, 172, 194]
-    style_layers = [None] * len(desired_layers)
-
-    for i in range(len(desired_layers)):
-        style_layers[i] = base_model.layers[desired_layers[i]].output
-        style_layers[i] = GlobalAveragePooling2D()(style_layers[i])
-        style_layers[i] = Dense(base_model.layers[desired_layers[i]].output_shape[3], activation='relu')(style_layers[i])
-
-    # egymás mellé tesszük a különböző szintű feature-öket
-    ff = merge(style_layers, mode='concat')
-
-    # ezután hozzáadunk két előrecsatolt réteget ReLU aktivációs függvénnyel
-    ff = Dense(2048, activation='relu')(ff)
-    ff = Dropout(0.5)(ff)
-    ff = Dense(1024, activation='relu')(ff)
-
-    # és végül egy kimenete lesz a hálónak - a "binary_crossentropy" költségfüggvénynek erre van szüksége
-    # 10 az output_layer_size
-    predictions = Dense(10, activation='softmax')(ff)
-
-    # a model létrehozása
-    model = Model(input=base_model.input, output=predictions)
-
-    # #################
-    # TODO súlybetöltés
-    # #################
-
-    model.load_weights(None)
-
+    model = model_from_json(json.loads('model.json'))
+    model.load_weights('sulyok.hdf5')
     return model
 
 
