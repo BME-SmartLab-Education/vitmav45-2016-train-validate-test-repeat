@@ -8,7 +8,8 @@ from keras.layers import Dense, GlobalAveragePooling2D, merge, Dropout
 import numpy as np
 from keras.utils.np_utils import to_categorical
 import json
-
+import tensorflow as tf
+tf.python.control_flow_ops = tf
 
 from keras.preprocessing import image
 
@@ -18,6 +19,8 @@ ALLOWED_EXTENSIONS = set(['jpeg', 'jpg', 'png'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+model = None
 
 # FLASK IMAGE UPLOAD SCRIPT FROM
 # http://flask.pocoo.org/docs/0.11/patterns/fileuploads/
@@ -47,7 +50,6 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            model = load_model()
             # small_image = preprocess_image(uploaded_file(filename))
             # output = predict(model, small_image)
             return redirect(url_for('uploaded_file',
@@ -67,7 +69,7 @@ def load_model():
     json_file = open('model.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
-    model = model_from_json(json.loads(loaded_model_json))
+    model = model_from_json(loaded_model_json)
     model.load_weights('sulyok.hdf5')
     return model
 
@@ -93,4 +95,5 @@ def preprocess_image(image):
     return small_image
 
 if __name__ == "__main__":
+    model = load_model()
     app.run()
