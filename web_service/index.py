@@ -1,17 +1,18 @@
 import os
-from flask import Flask, request, redirect, url_for
+import json
+import numpy as np
+
+from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
-from flask import send_from_directory
 from keras.models import Model, model_from_json
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, GlobalAveragePooling2D, merge, Dropout
-import numpy as np
 from keras.utils.np_utils import to_categorical
-import json
+from keras.preprocessing import image
+
 import tensorflow as tf
 tf.python.control_flow_ops = tf
 
-from keras.preprocessing import image
 
 UPLOAD_FOLDER = './images'
 ALLOWED_EXTENSIONS = set(['jpeg', 'jpg', 'png'])
@@ -20,7 +21,9 @@ ALLOWED_EXTENSIONS = set(['jpeg', 'jpg', 'png'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 model = None
+
 
 # FLASK IMAGE UPLOAD SCRIPT FROM
 # http://flask.pocoo.org/docs/0.11/patterns/fileuploads/
@@ -50,10 +53,9 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # small_image = preprocess_image(uploaded_file(filename))
-            # output = predict(model, small_image)
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            small_image_array = preprocess_image(filename)
+            output = predict(model, small_image_array)
+            return json.dumps(output)
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -75,24 +77,33 @@ def load_model():
 
 
 def predict(model, image):
-    output = model.predict(x=image, batch_size=1, verbose=0)
-
+    output = model.predict(x=[image], batch_size=1, verbose=0)
     # #################
     # TODO kimenetn rendezés
     # #################
+    output = output[0]
+    output2 = []
+    for i in range(len(output)):
+        output2.append([output[i], i])
+    output2.sort(key=lambda x: x[0])
+    output2 = output2[::-1]
+    for i in range(len(output2)):
+        output2[i][0] = str(output2[i][0])
+        output2[i][1] = str(output2[i][1])
+    return output2
 
-    return output
 
-
-def preprocess_image(image):
-
+def preprocess_image(img_name):
     # #################
     # TODO méretezés és arrayre változtatás
     # #################
-
-    small_image = None
-
-    return small_image
+    file_name, ext = os.path.splitext(img_name)
+    small_image = image.load_img(
+        '.' + url_for('uploaded_file', filename=img_name), target_size=(256, 256))
+    small_image.save('./images/' + file_name + '_thumbnail.jpg', 'JPEG')
+    small_image_array = np.array(small_image)
+    small_image_array = small_image_array[None, :]
+    return small_image_array
 
 if __name__ == "__main__":
     model = load_model()
