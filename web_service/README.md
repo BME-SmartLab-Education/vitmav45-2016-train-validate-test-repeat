@@ -35,3 +35,8 @@ The service returns with a valid JSON response in the following form:
   ...
 ]
 ```
+###NOTE
+The files model.json and sulyok.hdf5 (weights) are not included due to Github file size restrictions. In order to use the web service, please generate the files from the network.
+</br>
+Tutorial:</br>
+http://machinelearningmastery.com/save-load-keras-deep-learning-models/
