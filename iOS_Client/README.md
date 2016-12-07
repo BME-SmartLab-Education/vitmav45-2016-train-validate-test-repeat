@@ -2,7 +2,7 @@
 
 ##Usage:
 Tap on the upload button, choose an image from your Photo Lib, and wait a few seconds for the results.</br>
-The results shall indicate the likelíhood of that the image was painted by Painter No.#</br>
+The results shall indicate the likelihood of that the image was painted by Painter No.#</br>
 
 ##Details:
 The application uses the Alamofire HTTP framework to make requests for the Flask Web Service that can be found here:</br>
