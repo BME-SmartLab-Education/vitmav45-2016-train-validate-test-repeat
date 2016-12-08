@@ -5,6 +5,7 @@ Tap on the upload button, choose an image from your Photo Lib, and wait a few se
 The results shall indicate the likelihood of that the image was painted by Painter No.#</br>
 
 ##Details:
+The native application written is Swift 1.3 for iOS 10.1 target.</br>
 The application uses the Alamofire HTTP framework to make requests for the Flask Web Service that can be found here:</br>
 https://github.com/BME-SmartLab-Education/vitmav45-2016-train-validate-test-repeat/tree/master/web_service
 ##Screen:
