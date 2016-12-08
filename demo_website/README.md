@@ -11,4 +11,4 @@
 3. Launch index.html
 
 ##Screen
-
+![Image of the Website](https://github.com/BME-SmartLab-Education/vitmav45-2016-train-validate-test-repeat/blob/master/demo_website/screen.png)
