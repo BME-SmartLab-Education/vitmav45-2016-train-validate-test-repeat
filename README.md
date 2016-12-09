@@ -27,8 +27,8 @@ python learn.py
 ```
 
 ###Input 
-* csv_file_name - defined in _preprocess2.py_ | _cs_load_ function argument | path to the csv containing meta data 
-* location - defined in _preprocess2.py_ | _load_images_ function argument | path to the directory containing the training set images
+* **csv_file_name** - defined in _preprocess2.py_ | _cs_load_ function argument | path to the csv containing meta data 
+* **location** - defined in _preprocess2.py_ | _load_images_ function argument | path to the directory containing the training set images
 
 ###Output
 The output is an array with the size equal to the input size, containing 10 floats for each element. These floats represent the probability that the painter on a given index is the creater of the painting.
