@@ -6,17 +6,17 @@ Our task was to train a convolutional neural network (CNN)  to recognize the sty
 #Train 
 ##Dependencies 
 ###Libraries
-* Keras
-* TensorFlow
-* Numpy
-* Sklearn
-* Scipy
+* _Keras_
+* _TensorFlow_
+* _Numpy_
+* _Sklearn_
+* _Scipy_
 
 ##Included files
-* preprocess2.py - Processing the csv input, scaling and transforming the input images into tensors
-* learn.py - Train the neural network using the input data
-* train_info_modified_fix.csv - Data containing painter details
-* /train_sample - Image set for painters
+* _preprocess2.py_ - Processing the csv input, scaling and transforming the input images into tensors
+* _learn.py_ - Train the neural network using the input data
+* _train_info_modified_fix.csv_ - Data containing painter details
+* _/train_sample_ - Image set for painters
 
 ##Usage
 Parameters are modifiable from code only. 
@@ -27,8 +27,8 @@ python learn.py
 ```
 
 ###Input 
-* csv_file_name - defined in preprocess2.py | cs_load function argument | path to the csv containing meta data 
-* location - defined in preprocess2.py | load_images function argument | path to the directory containing the training set images
+* csv_file_name - defined in _preprocess2.py_ | _cs_load_ function argument | path to the csv containing meta data 
+* location - defined in _preprocess2.py_ | _load_images_ function argument | path to the directory containing the training set images
 
 ###Output
 The output is an array with the size equal to the input size, containing 10 floats for each element. These floats represent the probability that the painter on a given index is the creater of the painting.
