@@ -78,6 +78,7 @@ def load_model():
 
 
 def predict(model, image):
+    output = model.predict(x=[image], batch_size=1, verbose=0)
     output = output[0]
     output2 = []
     for i in range(len(output)):
