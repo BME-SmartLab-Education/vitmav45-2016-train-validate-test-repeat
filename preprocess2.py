@@ -13,7 +13,7 @@ def csv_load(csv_file_name = "train_info_modified_fixed.csv"):
     # Store the number of occurences of each author. By default, it is 0.
     author_stat = defaultdict(int)
 
-    with open(csv_file_name, encoding='utf') as csvfile:
+    with open(csv_file_name, encoding='utf8') as csvfile:
         reader = csv.reader(csvfile)
         next(reader, None)
         for line in reader:
