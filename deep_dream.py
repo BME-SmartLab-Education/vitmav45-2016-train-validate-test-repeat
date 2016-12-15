@@ -14,17 +14,20 @@ If running on CPU, prefer the TensorFlow backend (much faster).
 
 Example results: http://i.imgur.com/FX6ROg9.jpg
 '''
-from __future__ import print_function
-from keras.preprocessing.image import load_img, img_to_array
+
+
 import numpy as np
-from scipy.misc import imsave
-from scipy.optimize import fmin_l_bfgs_b
 import time
 import argparse
 
+from __future__ import print_function
+from keras.preprocessing.image import load_img, img_to_array
 from keras.applications import vgg16
 from keras import backend as K
 from keras.layers import Input
+from scipy.misc import imsave
+from scipy.optimize import fmin_l_bfgs_b
+
 
 parser = argparse.ArgumentParser(description='Deep Dreams with Keras.')
 parser.add_argument('base_image_path', metavar='base', type=str,
@@ -61,6 +64,8 @@ saved_settings = {
 settings = saved_settings['dreamy']
 
 # util function to open, resize and format pictures into appropriate tensors
+
+
 def preprocess_image(image_path):
     img = load_img(image_path, target_size=(img_width, img_height))
     img = img_to_array(img)
@@ -69,6 +74,8 @@ def preprocess_image(image_path):
     return img
 
 # util function to convert a tensor into a valid image
+
+
 def deprocess_image(x):
     if K.image_dim_ordering() == 'th':
         x = x.reshape((3, img_width, img_height))
@@ -101,6 +108,8 @@ print('Model loaded.')
 layer_dict = dict([(layer.name, layer) for layer in model.layers])
 
 # continuity loss util function
+
+
 def continuity_loss(x):
     assert K.ndim(x) == 4
     if K.image_dim_ordering() == 'th':
@@ -109,9 +118,9 @@ def continuity_loss(x):
         b = K.square(x[:, :, :img_width - 1, :img_height - 1] -
                      x[:, :, :img_width - 1, 1:])
     else:
-        a = K.square(x[:, :img_width - 1, :img_height-1, :] -
+        a = K.square(x[:, :img_width - 1, :img_height - 1, :] -
                      x[:, 1:, :img_height - 1, :])
-        b = K.square(x[:, :img_width - 1, :img_height-1, :] -
+        b = K.square(x[:, :img_width - 1, :img_height - 1, :] -
                      x[:, :img_width - 1, 1:, :])
     return K.sum(K.pow(a + b, 1.25))
 
@@ -119,22 +128,29 @@ def continuity_loss(x):
 loss = K.variable(0.)
 for layer_name in settings['features']:
     # add the L2 norm of the features of a layer to the loss
-    assert layer_name in layer_dict.keys(), 'Layer ' + layer_name + ' not found in model.'
+    assert layer_name in layer_dict.keys(), 'Layer ' + layer_name + \
+        ' not found in model.'
     coeff = settings['features'][layer_name]
     x = layer_dict[layer_name].output
     shape = layer_dict[layer_name].output_shape
     # we avoid border artifacts by only involving non-border pixels in the loss
     if K.image_dim_ordering() == 'th':
-        loss -= coeff * K.sum(K.square(x[:, :, 2: shape[2] - 2, 2: shape[3] - 2])) / np.prod(shape[1:])
+        loss -= coeff * \
+            K.sum(K.square(x[:, :, 2: shape[2] - 2,
+                             2: shape[3] - 2])) / np.prod(shape[1:])
     else:
-        loss -= coeff * K.sum(K.square(x[:, 2: shape[1] - 2, 2: shape[2] - 2, :])) / np.prod(shape[1:])
+        loss -= coeff * \
+            K.sum(K.square(x[:, 2: shape[1] - 2, 2: shape[2] - 2, :])) / np.prod(shape[1:])
 
-# add continuity loss (gives image local coherence, can result in an artful blur)
+# add continuity loss (gives image local coherence, can result in an
+# artful blur)
 loss += settings['continuity'] * continuity_loss(dream) / np.prod(img_size)
-# add image L2 norm to loss (prevents pixels from taking very high values, makes image darker)
+# add image L2 norm to loss (prevents pixels from taking very high values,
+# makes image darker)
 loss += settings['dream_l2'] * K.sum(K.square(dream)) / np.prod(img_size)
 
-# feel free to further modify the loss as you see fit, to achieve new effects...
+# feel free to further modify the loss as you see fit, to achieve new
+# effects...
 
 # compute the gradients of the dream wrt the loss
 grads = K.gradients(loss, dream)
@@ -146,6 +162,8 @@ else:
     outputs.append(grads)
 
 f_outputs = K.function([dream], outputs)
+
+
 def eval_loss_and_grads(x):
     x = x.reshape((1,) + img_size)
     outs = f_outputs([x])
@@ -162,7 +180,10 @@ def eval_loss_and_grads(x):
 # "loss" and "grads". This is done because scipy.optimize
 # requires separate functions for loss and gradients,
 # but computing them separately would be inefficient.
+
+
 class Evaluator(object):
+
     def __init__(self):
         self.loss_value = None
         self.grad_values = None
@@ -190,8 +211,10 @@ for i in range(5):
     print('Start of iteration', i)
     start_time = time.time()
 
-    # add a random jitter to the initial image. This will be reverted at decoding time
-    random_jitter = (settings['jitter'] * 2) * (np.random.random(img_size) - 0.5)
+    # add a random jitter to the initial image. This will be reverted at
+    # decoding time
+    random_jitter = (settings['jitter'] * 2) * \
+        (np.random.random(img_size) - 0.5)
     x += random_jitter
 
     # run L-BFGS for 7 steps

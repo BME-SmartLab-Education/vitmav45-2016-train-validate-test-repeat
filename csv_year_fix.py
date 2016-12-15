@@ -19,10 +19,6 @@ def csv_year_circa_fix():
     header = data[0]
     data = data[1:]
 
-    # for line in data:
-    #     if not line[5].isdigit() and line[5] != '':
-    #         print(line[5],line[0])
-
     try:
         with open(file_name_fixed, 'w') as csvfile:
             writer = csv.writer(csvfile)
