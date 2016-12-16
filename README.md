@@ -62,6 +62,9 @@ The output is an array with the size equal to the input size, containing 10 floa
 ###Usage
 Parameters are modifiable from code only. 
 
+####Run
+Run _hftest2.ipynb_
+
 ####Input 
 * **train_sample** - defined in _hftest2.ipynb_ | _load_images_ function argument | path to the train images
 * **filename** - defined in _hftest2.ipynb_ | _preprocess_image_ function argument | name of the base image for style-transfer
