@@ -6,6 +6,7 @@ Our task was to train a convolutional neural network (CNN)  to recognize the sty
 #Train 
 ###Dependencies 
 ####Libraries
+* _Python 3.5_
 * _Keras_
 * _TensorFlow_
 * _Numpy_
@@ -47,26 +48,23 @@ The output is an array with the size equal to the input size, containing 10 floa
 #Paint
 ###Dependencies 
 ####Libraries
-```
-TODO
-```
+* _Python 3.5_
+* _Keras_
+* _TensorFlow_
+* _Numpy_
+* _Sklearn_
+* _Scipy_
+
 
 ###Included files
-```
-TODO
-```
+* _hftest2.ipynb_ - Generate an image from the given style
 
 ###Usage
-```
-TODO
-```
+Parameters are modifiable from code only. 
 
 ####Input 
-```
-TODO
-```
+* **train_sample** - defined in _hftest2.ipynb_ | _load_images_ function argument | path to the train images
+* **filename** - defined in _hftest2.ipynb_ | _preprocess_image_ function argument | name of the base image for style-transfer
 
 ####Output
-```
-TODO
-```
+The 
