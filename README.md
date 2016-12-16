@@ -1,5 +1,5 @@
 #TRAIN_VALIDATE_TEST_REPEAT
-###VITMAV45 2016 GROUP PROJECT
+###GROUP PROJECT - VITMAV45 2016 
 
 Our task was to train a convolutional neural network (CNN)  to recognize the style of selected painters, and later on to determine the origin of a painting received as input. As fort the second part of the semester using the received results, we decided to recreate the learnt painter styles in a way, that the network is able to produce style from noise defined by the obtained features of given paintings.
 
