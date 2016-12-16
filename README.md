@@ -39,7 +39,6 @@ The output is an array with the size equal to the input size, containing 10 floa
  [0.9, ... , 0.01],
  [ ... ],
  ...
- ...
  [ ... ],
  [0.07, ... , 0.2]
 ]
