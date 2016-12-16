@@ -67,8 +67,8 @@ Run ```hftest2.ipynb```
 
 ####Input 
 * **train_sample** - defined in _hftest2.ipynb_ | _load_images_ function argument | path to the train images
-* **filename** - defined in _hftest2.ipynb_ | _preprocess_image_ function argument | name of the base image for style-transfer
-* _iteration number_ - the number of style-transfer iterations 
+* **filename** - defined in _hftest2.ipynb_ | _preprocess_image_ function argument | name of the base image for style transfer
+* _iteration number_ - the number of style transfer iterations 
 
 ####Output
 The output is an image whose base is the **filename** image and got some style features from the train images _iteration number_ times.
