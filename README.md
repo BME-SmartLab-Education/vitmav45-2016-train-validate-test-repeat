@@ -43,3 +43,35 @@ The output is an array with the size equal to the input size, containing 10 floa
  [0.07, ... , 0.2]
 ]
 ```
+
+#Paint
+##Dependencies 
+###Libraries
+```
+TODO
+```
+
+##Included files
+```
+TODO
+```
+
+##Usage
+```
+TODO
+```
+
+###Run training
+```
+TODO
+```
+
+###Input 
+```
+TODO
+```
+
+###Output
+```
+TODO
+```
