@@ -7,7 +7,7 @@ Our task was to train a convolutional neural network (CNN)  to recognize the sty
 ###Dependencies 
 ####Libraries
 * _Python 3.5_
-* _Keras_
+* _Keras_ (1.1.1)
 * _TensorFlow_
 * _Numpy_
 * _Sklearn_
@@ -49,7 +49,7 @@ The output is an array with the size equal to the input size, containing 10 floa
 ###Dependencies 
 ####Libraries
 * _Python 3.5_
-* _Keras_
+* _Keras_ (1.1.1)
 * _TensorFlow_
 * _Numpy_
 * _Sklearn_
