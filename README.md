@@ -63,11 +63,12 @@ The output is an array with the size equal to the input size, containing 10 floa
 Parameters are modifiable from code only. 
 
 ####Run
-Run _hftest2.ipynb_
+Run ```hftest2.ipynb```
 
 ####Input 
 * **train_sample** - defined in _hftest2.ipynb_ | _load_images_ function argument | path to the train images
 * **filename** - defined in _hftest2.ipynb_ | _preprocess_image_ function argument | name of the base image for style-transfer
+* _iteration number_ - the number of style-transfer iterations 
 
 ####Output
-The 
+The output is an image whose base is the **filename** image and got some style features from the train images _iteration number_ times.
