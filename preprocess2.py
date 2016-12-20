@@ -18,7 +18,7 @@ def csv_load(csv_file_name="train_info_modified_fixed.csv"):
         reader = csv.reader(csvfile)
         next(reader, None)
         for line in reader:
-            # The first artribute is the filename, it will be the key. Other
+            # The first attribute is the filename, it will be the key. Other
             # attributes are the values.
             csv_data[line[0]] = line[1:]
             # The second attribute is the author, so increase occurence number
@@ -42,9 +42,7 @@ def load_images(csv_data, location="train_sample"):
     """ Load the images which are in the csv_data from the given path, and return the list of images
         and corresponding authors as labels. """
 
-    data = []
-    labels = []
-
+    data, labels = [], []
     for subdir, dirs, files in os.walk(location):
         for file in files:
             if file in csv_data:
@@ -60,6 +58,7 @@ def load_images(csv_data, location="train_sample"):
                     print(len(labels), "images loaded")
 
     print(len(labels), "images in the result")
+    # Finally, we have to make numpy arrays from regular python arrays for Keras.
     return np.array(data), np.array(labels)
 
 if __name__ == "__main__":
