@@ -13,7 +13,7 @@ from sklearn import preprocessing
 
 
 class TrainingHistory(Callback):
-    # Tanulási folyamat elején létrehozunk egy-egy üres listát a kinyerni
+    # A tanulási folyamat elején létrehozunk egy-egy üres listát a kinyerni
     # kívánt metrikák tárolása céljából.
 
     def on_train_begin(self, logs={}):
@@ -40,18 +40,16 @@ class TrainingHistory(Callback):
 
 
 def prepare_data():
-    # betöltjük a képeket leíró adatfájlt és a statisztikát a festők képeinek
-    # eloszlásáról (előfordulás szerint növekvő lista)
+    # Betöltjük a képeket leíró adatfájlt és a statisztikát a festők képeinek
+    # eloszlásáról (amely egy előfordulás szerint növekvő tuple-lista)
     csv_data, author_stat = pp.csv_load()
-    # kiválasztjuk a 100 legnépszerűbb festőt (ez az összes kép esetén kb
-    # 27.000 kép)
+    # Kiválasztjuk a 100 legnépszerűbb festőt (ez kb 27.000 kép)
     authors_to_select = author_stat[-100:]
-    # frissítjük az adatfájlt hogy már csak a kiválaszott festők képeit töltse
-    # be
+    # Frissítjük az adatfájlt hogy már csak a kiválaszott festők képeit töltse be
     csv_data_selected = pp.csv_select(csv_data, authors_to_select)
     train_images, labels = pp.load_images(csv_data_selected)
 
-    # kódoljuk a festőket
+    # Kódoljuk a festőket
     encoder = preprocessing.LabelEncoder()
     encoder.fit(labels)
     labels_onehot = to_categorical(encoder.transform(labels))
@@ -62,8 +60,7 @@ def prepare_data():
 def make_model(output_layer_size):
     base_model = InceptionV3(weights='imagenet', include_top=False)
 
-    # kinyerjük a stílusjegyeket a cnn köztes rétegegeiből (és max pool cnn
-    # kimeneti rétegére)
+    # Kinyerjük a stílusjegyeket a cnn köztes rétegegeiből 
     desired_layers = [28, 44, 60, 70, 92, 114, 136, 158, 172, 194]
     style_layers = [None] * len(desired_layers)
 
@@ -73,19 +70,19 @@ def make_model(output_layer_size):
         style_layers[i] = Dense(base_model.layers[desired_layers[i]].output_shape[
                                 3], activation='relu')(style_layers[i])
 
-    # egymás mellé tesszük a különböző szintű feature-öket
+    # Egymás mellé tesszük a különböző szintű feature-öket
     ff = merge(style_layers, mode='concat')
 
-    # ezután hozzáadunk két előrecsatolt réteget ReLU aktivációs függvénnyel
+    # Hozzáadunk két előrecsatolt réteget ReLU aktivációs függvénnyel
     ff = Dense(2048, activation='relu')(ff)
     ff = Dropout(0.5)(ff)
     ff = Dense(1024, activation='relu')(ff)
 
-    # és végül egy kimenete lesz a hálónak - a "binary_crossentropy"
+    # Végül egy kimenete lesz a hálónak mivel a binary_crossentropy
     # költségfüggvénynek erre van szüksége
     predictions = Dense(output_layer_size, activation='softmax')(ff)
 
-    # a model létrehozása
+    # Létrehozzuk a modellt
     return base_model, Model(input=base_model.input, output=predictions)
 
 
@@ -94,31 +91,29 @@ def learn():
     base_model, model = make_model(output_layer_size=labels_onehot.shape[1])
     history = TrainingHistory()
 
-    # két lépésben fogjuk tanítani a hálót
-    # az első lépésben csak az előrecsatolt rétegeket tanítjuk, a konvolúciós
-    # rétegeket befagyasztjuk
+    # Két lépésben fogjuk tanítani a hálót: az első lépésben csak az előrecsatolt 
+    # rétegeket tanítjuk, a konvolúciós rétegeket pedig befagyasztjuk
     for layer in base_model.layers:
         layer.trainable = False
-    # lefordítjuk a modelt (fontos, hogy ezt a rétegek befagyasztása után csináljuk"
-    # mivel két osztályunk van, ezért bináris keresztentrópia költségfüggvényt
-    # használunk
+    # Lefordítjuk a modellt (fontos, hogy ezt a rétegek befagyasztása után csináljuk)
+    # Mivel két osztályunk van, ezért bináris keresztentrópia költségfüggvényt használunk
     model.compile(optimizer='adam',
                   loss='categorical_crossentropy', metrics=['accuracy'])
     model.fit(train_images, labels_onehot, batch_size=16,
               nb_epoch=50, validation_split=0.2, callbacks=[history])
 
-    # és ismét indítunk egy tanítást, ezúttal nem csak az előrecsatolt rétegek,
+    # Ismét indítunk egy tanítást, ezúttal nem csak az előrecsatolt rétegek,
     # hanem az Inception V3 felső rétegei is tovább tanulnak
     for layer in model.layers[172:]:
         layer.trainable = True
-    # ez után újra le kell fordítanunk a hálót, hogy most már az Inception V3
-    # felsőbb rétegei tanuljanak
+    # Ez után újra le kell fordítanunk a hálót, hogy most már az Inception V3
+    # felsőbb rétegei is tanuljanak
     model.compile(optimizer=SGD(lr=0.0001, momentum=0.9),
                   loss='categorical_crossentropy', metrics=['accuracy'])
     model.fit(train_images, labels_onehot,  batch_size=32,
               nb_epoch=100, validation_split=0.2, callbacks=[history])
 
-    print("Tanítás vége.")
+    print("Train completed.")
 
 if __name__ == "__main__":
     learn()
