@@ -3,6 +3,9 @@
 
 Our task was to train a convolutional neural network (CNN)  to recognize the style of selected painters, and later on to determine the origin of a painting received as input. As for the second part of the semester using the received results, we decided to recreate the learnt painter styles in a way, that the network is able to produce style from noise defined by the obtained features of given paintings.
 
+#Paper
+<a href="https://github.com/BME-SmartLab-Education/vitmav45-2016-train-validate-test-repeat/blob/master/train-validate-test-repeat-vitmav45-beszamolo.pdf">Link to the paper</a>
+
 #Train 
 ###Dependencies 
 ####Libraries
